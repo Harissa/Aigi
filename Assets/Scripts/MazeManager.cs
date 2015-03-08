@@ -70,7 +70,8 @@ public class MazeManager : MonoBehaviour
 
 		void createDots ()
 		{
-				Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
+				//Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
+		Vector3 offset = new Vector3 (0, 0, 0);
 				for (int x = 0; x < width; x++) {
 						for (int y = 0; y < height; y++) {
 								GameObject newPill = makePill (x, y, offset, Vector3.zero);
@@ -131,7 +132,8 @@ public class MazeManager : MonoBehaviour
 	{
 		Vector3 offset = Vector3.zero;
 		Vector3 rotate = Vector3.zero;
-		Vector3 position = new Vector3 (cellWidth * (0.5f+x-(width/2.0f)), -0.5f, cellHeight * (0.5f+y-(height/2.0f))) + transform.position;
+		//Vector3 position = new Vector3 (cellWidth * (0.5f+x-(width/2.0f)), -0.5f, cellHeight * (0.5f+y-(height/2.0f))) + transform.position;
+		Vector3 position = new Vector3 (cellWidth * x, -0.5f, cellHeight * y) + transform.position;
 		GameObject newFloor = (GameObject)Instantiate (floorTilePrefab, position+offset, Quaternion.Euler (rotate));
 		GameObject newCeiling = (GameObject)Instantiate (floorTilePrefab, position+offset+new Vector3(0,1.5f,0), Quaternion.Euler (rotate));
 		newFloor.transform.parent = transform;
@@ -142,7 +144,9 @@ public class MazeManager : MonoBehaviour
 		void makeWall (int x, int y, Vector3 offset, Vector3 rotate)
 		{
 				
-				Vector3 position = new Vector3 (cellWidth * (0.5f + x - (width / 2.0f)), 0, cellHeight * (0.5f + y - (height / 2.0f))) + transform.position;
+				//Vector3 position = new Vector3 (cellWidth * (0.5f + x - (width / 2.0f)), 0, cellHeight * (0.5f + y - (height / 2.0f))) + transform.position;
+				Vector3 position = new Vector3 (cellWidth * x, 0, cellHeight * y) + transform.position;
+
 				GameObject newWall = (GameObject)Instantiate (wallPrefab, position + offset, Quaternion.Euler (rotate));
 				newWall.transform.parent = transform;
 		Debug.Log ("Make wall at " + (position + offset).ToString ());
@@ -150,7 +154,9 @@ public class MazeManager : MonoBehaviour
 
 		GameObject makePill (int x, int y, Vector3 offset, Vector3 rotate)
 		{
-				Vector3 position = new Vector3 (cellWidth * (x - (width / 2.0f)), 0, cellHeight * (y - (height / 2.0f))) + transform.position;
+				//Vector3 position = new Vector3 (cellWidth * (x - (width / 2.0f)), 0, cellHeight * (y - (height / 2.0f))) + transform.position;
+				Vector3 position = new Vector3 (cellWidth * x, 0, cellHeight * y) + transform.position;
+
 				GameObject newDot = (GameObject)Instantiate (dotPrefab, position + offset, Quaternion.Euler (rotate));
 				newDot.transform.parent = transform;
 				return newDot;
@@ -207,9 +213,11 @@ public class MazeManager : MonoBehaviour
 								break;
 						}
 			 
-						Vector3 position = new Vector3 (cellWidth * (pos.x - (width / 2.0f)), 0, cellHeight * (pos.y - (height / 2.0f))) + transform.position;
-						Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
-						ghosts [i].transform.position = position + offset;
+						//Vector3 position = new Vector3 (cellWidth * (pos.x - (width / 2.0f)), 0, cellHeight * (pos.y - (height / 2.0f))) + transform.position;
+						Vector3 position = new Vector3 (cellWidth * pos.x, 0, cellHeight * pos.y) + transform.position;
+
+						//Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
+			ghosts [i].transform.position = position;// + offset;
 						ghosts[i].GetComponent<GhostBillboard>().clearStack();
 						}
 		}

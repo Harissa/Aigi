@@ -18,6 +18,8 @@ public class MiniMap : MonoBehaviour
 		public int cellHeight;
 		public int cellWidth;
 		private float halfCellWidth, halfCellHeight;
+		private Vector3 offset;
+		private List<GameObject> ghostIcons;
 		// Use this for initialization
 		void Start ()
 		{
@@ -39,14 +41,22 @@ public class MiniMap : MonoBehaviour
 						makeGhostIcons ();
 				}
 		}
+		public void centreMap() {
+		offset = new Vector3 (-(mazeManager.width / 2.0f), 0, -(mazeManager.height / 2.0f));
+		for (int i=0; i<ghostIcons.Count; i++) {
+			ghostIcons [i].GetComponent<GhostIcon> ().setOffset (offset);
+		}
+	}
 
 		void makeGhostIcons ()
 		{
 				List<GameObject> ghosts = mazeManager.getGhosts ();
+				ghostIcons = new List<GameObject> ();
 				for (int i=0; i<ghosts.Count; i++) {
 						GameObject newIcon = (GameObject)Instantiate (ghostIcon, Vector3.zero, Quaternion.identity);
 						newIcon.transform.parent = transform;
 						newIcon.GetComponent<GhostIcon> ().ghost = ghosts [i];
+						ghostIcons.Add (newIcon);
 						
 				}
 		}
@@ -57,10 +67,11 @@ public class MiniMap : MonoBehaviour
 		{
 				if (visible) {
 						Vector3 playerPos = player.transform.position;
-						playerIcon.transform.localPosition = player.transform.position;
-						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x + (mazeManager.width / 2.0f) - 0.5f), Mathf.Round (playerPos.z + (mazeManager.height / 2.0f) - 0.5f));
+						playerIcon.transform.localPosition = player.transform.position+offset;
+						//Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x + (mazeManager.width / 2.0f) - 0.5f), Mathf.Round (playerPos.z + (mazeManager.height / 2.0f) - 0.5f));
+						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x -0.5f), Mathf.Round (playerPos.z -0.5f));
 
-								if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
+						if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
 								drawCell ((int)cellPos.x, (int)cellPos.y);
 								mazeManager.currentMaze.setVisited ((int)cellPos.x, (int)cellPos.y, true);
 						}
@@ -119,10 +130,12 @@ public class MiniMap : MonoBehaviour
 
 
 // Adds the wall prefab to the scene
-		void makeWall (int x, int y, Vector3 offset, Vector3 rotate)
+		void makeWall (int x, int y, Vector3 wallOffset, Vector3 rotate)
 		{
-				Vector3 position = new Vector3 (cellWidth * (0.5f + x - (mazeManager.width / 2.0f)), -1.5f, cellHeight * (0.5f + y - (mazeManager.height / 2.0f))) + transform.position;
-				GameObject newWall = (GameObject)Instantiate (wallPrefab, position + offset, Quaternion.Euler (rotate));
+				//Vector3 position = new Vector3 (cellWidth * (0.5f + x - (mazeManager.width / 2.0f)), -1.5f, cellHeight * (0.5f + y - (mazeManager.height / 2.0f))) + transform.position;
+		Vector3 position = new Vector3 (cellWidth * x, -1.5f, cellHeight * y) + transform.position + offset;
+
+		GameObject newWall = (GameObject)Instantiate (wallPrefab, position + wallOffset, Quaternion.Euler (rotate));
 				
 				newWall.transform.parent = transform;
 		}

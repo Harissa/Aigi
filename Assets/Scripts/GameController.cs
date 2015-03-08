@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
 
 		void startGame ()
 		{
-				level = 1;
+		level = 2;//1;
 				lives = 3;
 				updateLevel ();
 				updateLives ();
@@ -116,12 +116,14 @@ public class GameController : MonoBehaviour
 		{
 				MiniMap miniMap = (MiniMap)GameObject.Find ("Minimap").GetComponent (typeof(MiniMap));
 				miniMap.setVisible (isActive);
+				miniMap.centreMap ();
 		}
 
 		void setPlayerPos ()
 		{
 				GameObject Player = GameObject.Find ("Player");
-				Player.transform.position = new Vector3 (-0.5f + (maze.width % 2) / 2.0f, 0, -0.5f + (maze.height % 2) / 2.0f);
+				//Player.transform.position = new Vector3 (-0.5f + (maze.width % 2) / 2.0f, 0, -0.5f + (maze.height % 2) / 2.0f);
+		Player.transform.position = new Vector3 (Mathf.Round (maze.width / 2.0f), 0, Mathf.Round(maze.height /2.0f));
 		}
 	
 		void startLevel ()
