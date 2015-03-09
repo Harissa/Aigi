@@ -76,6 +76,14 @@ public class Maze
 				return ((cells [x, y] & (int)flag) > 0);
 		}
 
+		public bool validHasDirection(int x,int y, Directions flag) {
+			if (isValidCell (x, y)) {
+				return hasDirection (x, y, flag);
+			} else {
+				return false;
+			}
+		}
+
 		public bool hasVisited (int x, int y)
 		{		
 			return visited [x, y];
@@ -86,19 +94,20 @@ public class Maze
 				visited [x, y] = hasVisited;
 		}
 	public List<Vector2> getRoutes(Vector2 centreCell) {
+		Debug.Log ("get routes centre=" + centreCell.ToString ());
 		int cellX = Mathf.RoundToInt (centreCell.x);
 		int cellY = Mathf.RoundToInt (centreCell.y);
 		List<Vector2> routes = new List<Vector2> ();
-		if ((!hasDirection (cellX, cellY, Directions.N)) && (!hasDirection (cellX, cellY - 1, Directions.S))) {
+		if ((!hasDirection (cellX, cellY, Directions.N)) && (!validHasDirection (cellX, cellY - 1, Directions.S))) {
 			routes.Add (new Vector2 (cellX, cellY - 1));
 		}
-		if ((!hasDirection (cellX, cellY, Directions.S)) && (!hasDirection (cellX, cellY + 1, Directions.N))) {
+		if ((!hasDirection (cellX, cellY, Directions.S)) && (!validHasDirection (cellX, cellY + 1, Directions.N))) {
 			routes.Add (new Vector2 (cellX, cellY + 1));
 		}
-		if ((!hasDirection (cellX, cellY, Directions.W)) && (!hasDirection (cellX - 1, cellY, Directions.E))) {
+		if ((!hasDirection (cellX, cellY, Directions.W)) && (!validHasDirection (cellX - 1, cellY, Directions.E))) {
 			routes.Add (new Vector2 (cellX - 1, cellY));
 		}
-		if ((!hasDirection (cellX, cellY, Directions.E)) && (!hasDirection (cellX + 1, cellY, Directions.W))) {
+		if ((!hasDirection (cellX, cellY, Directions.E)) && (!validHasDirection (cellX + 1, cellY, Directions.W))) {
 			routes.Add (new Vector2 (cellX, cellY + 1));
 		}
 		return routes;

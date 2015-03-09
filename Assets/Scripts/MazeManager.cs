@@ -51,6 +51,12 @@ public class MazeManager : MonoBehaviour
 		{
 				return ghosts;
 		}
+	public  List<Vector2> getRoutes(Vector2 centreCell) {
+		return currentMaze.getRoutes (centreCell);
+	}
+	public bool hasVisited (int x, int y) {
+		return currentMaze.hasVisited (x, y);
+	}
 
 		void removeCurrentMaze ()
 		{
@@ -67,6 +73,7 @@ public class MazeManager : MonoBehaviour
 		if (level==1) {size=3;}
 		return size;
 		}
+
 
 		void createDots ()
 		{

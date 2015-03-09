@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
 
 		void startGame ()
 		{
-		level = 2;//1;
+		level = 1;
 				lives = 3;
 				updateLevel ();
 				updateLives ();
@@ -121,9 +121,10 @@ public class GameController : MonoBehaviour
 
 		void setPlayerPos ()
 		{
-				GameObject Player = GameObject.Find ("Player");
+		PlayerControls player = (PlayerControls)GameObject.Find ("Player").GetComponent (typeof(PlayerControls));
 				//Player.transform.position = new Vector3 (-0.5f + (maze.width % 2) / 2.0f, 0, -0.5f + (maze.height % 2) / 2.0f);
-		Player.transform.position = new Vector3 (Mathf.Round (maze.width / 2.0f), 0, Mathf.Round(maze.height /2.0f));
+				player.setStartPos(Mathf.Round (maze.width / 2.0f), Mathf.Round (maze.height / 2.0f));
+	
 		}
 	
 		void startLevel ()
