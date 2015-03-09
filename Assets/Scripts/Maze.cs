@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 // Maze
 // Data structure class which holds the Maze data
 
@@ -84,19 +85,21 @@ public class Maze
 		{
 				visited [x, y] = hasVisited;
 		}
-	public List<Vector2> getRoutes(Vector2 cell) {
+	public List<Vector2> getRoutes(Vector2 centreCell) {
+		int cellX = Mathf.RoundToInt (centreCell.x);
+		int cellY = Mathf.RoundToInt (centreCell.y);
 		List<Vector2> routes = new List<Vector2> ();
-		if ((!hasDirection (cell.x, cell.y, Directions.N)) && (!hasDirection (cell.x, cell.y - 1, Directions.S))) {
-			routes.Add (new Vector2 (cell.x, cell.y - 1));
+		if ((!hasDirection (cellX, cellY, Directions.N)) && (!hasDirection (cellX, cellY - 1, Directions.S))) {
+			routes.Add (new Vector2 (cellX, cellY - 1));
 		}
-		if ((!hasDirection (cell.x, cell.y, Directions.S)) && (!hasDirection (cell.x, cell.y + 1, Directions.N))) {
-			routes.Add (new Vector2 (cell.x, cell.y + 1));
+		if ((!hasDirection (cellX, cellY, Directions.S)) && (!hasDirection (cellX, cellY + 1, Directions.N))) {
+			routes.Add (new Vector2 (cellX, cellY + 1));
 		}
-		if ((!hasDirection (cell.x, cell.y, Directions.W)) && (!hasDirection (cell.x - 1, cell.y, Directions.E))) {
-			routes.Add (new Vector2 (cell.x - 1, cell.y));
+		if ((!hasDirection (cellX, cellY, Directions.W)) && (!hasDirection (cellX - 1, cellY, Directions.E))) {
+			routes.Add (new Vector2 (cellX - 1, cellY));
 		}
-		if ((!hasDirection (cell.x, cell.y, Directions.E)) && (!hasDirection (cell.x + 1, cell.y, Directions.W))) {
-			routes.Add (new Vector2 (cell.x, cell.y + 1));
+		if ((!hasDirection (cellX, cellY, Directions.E)) && (!hasDirection (cellX + 1, cellY, Directions.W))) {
+			routes.Add (new Vector2 (cellX, cellY + 1));
 		}
 		return routes;
 	}

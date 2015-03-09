@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class PlayerControls : MonoBehaviour {
 
 
@@ -115,14 +116,16 @@ public class PlayerControls : MonoBehaviour {
 	// hmm, should I have used a tree weighing algorithm?
 
 	void findRoute(Vector2 startCell) {
-		Queue frontier = new Queue ();
-		frontier.Enqueue (startCell); // priority 0
+
+		PriorityQueue<int,Vector2> frontier = new PriorityQueue<int,Vector2> ();
+		frontier.Enqueue (startCell,0); 
 		Hashtable cameFrom = new Hashtable ();
 		Hashtable costSoFar = new Hashtable ();
 		cameFrom.Add (startCell, null);
-		costSoFar.Add (Start, 0);
+		//costSoFar.Add (Start, 0);
+		costSoFar [startCell] = 0;
 
-		while (frontier.Count>0) {
+		while (!frontier.IsEmpty) {
 			Vector2 current = frontier.Dequeue ();
 			List<Vector2> neighbours = maze.getRoutes (current);
 			for (int i=0; i<neighbours.Count; i++) {
@@ -131,7 +134,7 @@ public class PlayerControls : MonoBehaviour {
 				if (!costSoFar.Contains (neighbours[i]) || (newCost < costSoFar.GetObjectData(neighbours[i]))) {
 					costSoFar.Add(neighbours[i],newCost);
 					int priority = newCost + heuristic(neighbours[i]);
-					frontier.Enqueue(neighbours[i]); // how to add the priority in here?
+					frontier.Enqueue(neighbours[i],priority); 
 					cameFrom.Add (neighbours[i],current);
 				}
 			}
