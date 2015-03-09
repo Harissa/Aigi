@@ -77,7 +77,8 @@ public class Maze
 
 		public bool hasVisited (int x, int y)
 		{
-				return visited [x, y];
+		Debug.Log ("has visited " + x + "," + y);		
+		return visited [x, y];
 		}
 
 		public void setVisited (int x, int y, bool hasVisited)

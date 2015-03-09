@@ -69,7 +69,7 @@ public class MiniMap : MonoBehaviour
 						Vector3 playerPos = player.transform.position;
 						playerIcon.transform.localPosition = player.transform.position+offset;
 						//Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x + (mazeManager.width / 2.0f) - 0.5f), Mathf.Round (playerPos.z + (mazeManager.height / 2.0f) - 0.5f));
-						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x -0.5f), Mathf.Round (playerPos.z -0.5f));
+						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x), Mathf.Round (playerPos.z));
 
 						if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
 								drawCell ((int)cellPos.x, (int)cellPos.y);
