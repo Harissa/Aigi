@@ -76,13 +76,29 @@ public class Maze
 		}
 
 		public bool hasVisited (int x, int y)
-		{
-		Debug.Log ("has visited " + x + "," + y);		
-		return visited [x, y];
+		{		
+			return visited [x, y];
 		}
 
 		public void setVisited (int x, int y, bool hasVisited)
 		{
 				visited [x, y] = hasVisited;
 		}
+	public List<Vector2> getRoutes(Vector2 cell) {
+		List<Vector2> routes = new List<Vector2> ();
+		if ((!hasDirection (cell.x, cell.y, Directions.N)) && (!hasDirection (cell.x, cell.y - 1, Directions.S))) {
+			routes.Add (new Vector2 (cell.x, cell.y - 1));
+		}
+		if ((!hasDirection (cell.x, cell.y, Directions.S)) && (!hasDirection (cell.x, cell.y + 1, Directions.N))) {
+			routes.Add (new Vector2 (cell.x, cell.y + 1));
+		}
+		if ((!hasDirection (cell.x, cell.y, Directions.W)) && (!hasDirection (cell.x - 1, cell.y, Directions.E))) {
+			routes.Add (new Vector2 (cell.x - 1, cell.y));
+		}
+		if ((!hasDirection (cell.x, cell.y, Directions.E)) && (!hasDirection (cell.x + 1, cell.y, Directions.W))) {
+			routes.Add (new Vector2 (cell.x, cell.y + 1));
+		}
+		return routes;
+	}
+
 }

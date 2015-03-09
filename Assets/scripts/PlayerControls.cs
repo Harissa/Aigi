@@ -13,6 +13,7 @@ public class PlayerControls : MonoBehaviour {
 	private float posX;
 	public float turnSpeed;
 	public AudioClip dotSound;
+	public Maze maze;
 	
 	public KeyCode run;
 
@@ -21,6 +22,8 @@ public class PlayerControls : MonoBehaviour {
 	
 	private CharacterController cController;
 	private Animator animator;
+
+	private Vector2 currentCell;
 	
 	// Use this for initialization
 	void Start () {
@@ -36,6 +39,9 @@ public class PlayerControls : MonoBehaviour {
 	
 	void FixedUpdate ()
 	{
+		currentCell.x = Mathf.Round (transform.position.x);
+		currentCell.y = Mathf.Round (transform.position.z);
+
 	  float moveHorizontal = Input.GetAxis("Horizontal");
 	  float moveVertical = Input.GetAxis("Vertical");
 	  Vector3 movement = new Vector3(0.0f,0.0f,moveVertical) * speed;
@@ -92,4 +98,43 @@ public class PlayerControls : MonoBehaviour {
 
 	  }
     }
+	int mazeCost(Vector2 current, Vector2 next) {
+		return 1; // TODO fix cost
+	}
+	int heuristic(Vector2 next) {
+		return 1; // TODO fix heuristic
+	}
+	// TODO
+	// How does a* react to negative maze costs?
+	// how do we turn something designed to find a goal into something which finds the best route?
+	// priority needs to have dots added to it
+	// if dot cost = -1
+	// if ghost cost = 10
+	// Can we add in a priority queue ***
+	// How do we know what is the best route ***
+	// hmm, should I have used a tree weighing algorithm?
+
+	void findRoute(Vector2 startCell) {
+		Queue frontier = new Queue ();
+		frontier.Enqueue (startCell); // priority 0
+		Hashtable cameFrom = new Hashtable ();
+		Hashtable costSoFar = new Hashtable ();
+		cameFrom.Add (startCell, null);
+		costSoFar.Add (Start, 0);
+
+		while (frontier.Count>0) {
+			Vector2 current = frontier.Dequeue ();
+			List<Vector2> neighbours = maze.getRoutes (current);
+			for (int i=0; i<neighbours.Count; i++) {
+				int newCost = costSoFar.GetObjectData(current) + mazeCost(current,neighbours[i]);
+				// if we haven't come here before or have a better way then add
+				if (!costSoFar.Contains (neighbours[i]) || (newCost < costSoFar.GetObjectData(neighbours[i]))) {
+					costSoFar.Add(neighbours[i],newCost);
+					int priority = newCost + heuristic(neighbours[i]);
+					frontier.Enqueue(neighbours[i]); // how to add the priority in here?
+					cameFrom.Add (neighbours[i],current);
+				}
+			}
+		}
+	}
 }
