@@ -96,6 +96,9 @@ public class MazeManager : MonoBehaviour
 		} else {
 				noOfGhosts = newLevel - 1;
 		}
+		// Todo
+		noOfGhosts = 0;
+
 		for (int i=0;i<noOfGhosts;i++)
 		{
 			ghosts.Add(makeGhost(i));
@@ -142,8 +145,8 @@ public class MazeManager : MonoBehaviour
 		//Vector3 position = new Vector3 (cellWidth * (0.5f+x-(width/2.0f)), -0.5f, cellHeight * (0.5f+y-(height/2.0f))) + transform.position;
 		Vector3 position = new Vector3 (cellWidth * x, -0.5f, cellHeight * y) + transform.position;
 		GameObject newFloor = (GameObject)Instantiate (floorTilePrefab, position+offset, Quaternion.Euler (rotate));
-		//GameObject newCeiling = (GameObject)Instantiate (floorTilePrefab, position+offset+new Vector3(0,1.5f,0), Quaternion.Euler (rotate));
-		//newCeiling.transform.parent = transform;
+		GameObject newCeiling = (GameObject)Instantiate (floorTilePrefab, position+offset+new Vector3(0,1.5f,0), Quaternion.Euler (rotate));
+		newCeiling.transform.parent = transform;
 		newFloor.transform.parent = transform;
 
 	}
