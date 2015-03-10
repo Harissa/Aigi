@@ -50,7 +50,7 @@ public class PlayerControls : MonoBehaviour
 		currentCell.z = Mathf.Round (y);
 		lastCell = currentCell;
 		nextCell = findRoute (currentCell, lastCell);
-		Debug.Log ("Current cell=" + currentCell.ToString () + "next=" + nextCell.ToString ());
+		//Debug.Log ("Current cell=" + currentCell.ToString () + "next=" + nextCell.ToString ());
 		paused = false;
 
 	}
@@ -58,19 +58,23 @@ public class PlayerControls : MonoBehaviour
 	void FixedUpdate ()
 	{
 		if (!paused) {
-			currentCell.x = Mathf.Round (transform.position.x);
-			currentCell.z = Mathf.Round (transform.position.z);
-			if (currentCell.Equals (nextCell)) {
+
+		
+			if ((Vector3.Distance (nextCell,transform.position)<0.2)) {
+				currentCell.x = Mathf.Round (transform.position.x);
+				currentCell.z = Mathf.Round (transform.position.z);
 				nextCell = findRoute (currentCell, lastCell);
 				lastCell = currentCell;
-				Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
+				//Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
 			}
 
 			//float moveHorizontal = Input.GetAxis("Horizontal");
 			//float moveVertical = Input.GetAxis("Vertical");
-			//Vector3 movement = new Vector3(0.0f,0.0f,moveVertical) * speed;
+			//Vector3 movement = new Vector3(0.0f,0.0f,1.0f) * speed;
 			float step = speed * Time.deltaTime;
 			transform.position = Vector3.MoveTowards (transform.position, nextCell, step);
+			transform.LookAt(nextCell);
+
 			//movement = transform.TransformDirection(movement);
 			//movement.y += yVelocity;
 			//cController.Move(movement * Time.deltaTime);
@@ -88,11 +92,11 @@ public class PlayerControls : MonoBehaviour
 				animator.SetBool ("running", false);
 			}
 	  
-			Vector3 rot = transform.localEulerAngles;
+			//Vector3 rot = transform.localEulerAngles;
 			// TODO set rotation to reflect motio 
 			//rotation += moveHorizontal * turnSpeed;
-			rot.y = rotation;
-			transform.localEulerAngles = rot;
+			//rot.y = rotation;
+			//transform.localEulerAngles = rot;
 			if (eatenDot) {
 				eatenDot = false;
 				AudioSource.PlayClipAtPoint (dotSound, transform.position);
@@ -212,7 +216,7 @@ public class PlayerControls : MonoBehaviour
 				}
 			}
 		}
-		return (thisScore + maxScore);
+		return (thisScore + Mathf.Max (maxScore,0));
 	}
 
 }

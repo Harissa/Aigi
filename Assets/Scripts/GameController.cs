@@ -251,6 +251,7 @@ public class GameController : MonoBehaviour
 	
 	public void updateScore ()
 	{
+		Debug.Log ("update score");
 		scoreText.text = "Dots left: " + pillsInWorld.ToString ();
 	}
 
