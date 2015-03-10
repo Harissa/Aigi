@@ -25,8 +25,9 @@ public class PlayerControls : MonoBehaviour {
 	private CharacterController cController;
 	private Animator animator;
 
-	private Vector2 currentCell;
-	private Vector2 nextCell;
+	private bool paused=true;
+	private Vector3 currentCell;
+	private Vector3 nextCell;
 	private Hashtable hasVisited = new Hashtable ();
 	
 	// Use this for initialization
@@ -43,57 +44,59 @@ public class PlayerControls : MonoBehaviour {
 	}
 	public void setStartPos(float x, float y) {
 		transform.position = new Vector3 (x, 0, y);
-		currentCell.x = Mathf.Round (transform.position.x);
-		currentCell.y = Mathf.Round (transform.position.z);
+		currentCell.x = Mathf.Round (x);
+		currentCell.y = Mathf.Round (0);
+		currentCell.z = Mathf.Round (y);
 		nextCell = findRoute (currentCell);
 		Debug.Log ("Current cell="+currentCell.ToString ()+"next="+nextCell.ToString ());
+		paused = false;
 
 	}
 	
 	void FixedUpdate ()
 	{
-		currentCell.x = Mathf.Round (transform.position.x);
-		currentCell.y = Mathf.Round (transform.position.z);
-		//if (currentCell.Equals(nextCell)) {
-		//	nextCell = findRoute(currentCell);
-		//}
+		if (!paused) {
+			currentCell.x = Mathf.Round (transform.position.x);
+			currentCell.z = Mathf.Round (transform.position.z);
+			if (currentCell.Equals (nextCell)) {
+				nextCell = findRoute (currentCell);
+				Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
+			}
 
-	  //float moveHorizontal = Input.GetAxis("Horizontal");
-	  //float moveVertical = Input.GetAxis("Vertical");
-	  //Vector3 movement = new Vector3(0.0f,0.0f,moveVertical) * speed;
-		float step = speed * Time.deltaTime;
-		transform.position = Vector3.MoveTowards(transform.position, nextCell, step);
-	  //movement = transform.TransformDirection(movement);
-	  //movement.y += yVelocity;
-	  //cController.Move(movement * Time.deltaTime);
+			//float moveHorizontal = Input.GetAxis("Horizontal");
+			//float moveVertical = Input.GetAxis("Vertical");
+			//Vector3 movement = new Vector3(0.0f,0.0f,moveVertical) * speed;
+			float step = speed * Time.deltaTime;
+			transform.position = Vector3.MoveTowards (transform.position, nextCell, step);
+			//movement = transform.TransformDirection(movement);
+			//movement.y += yVelocity;
+			//cController.Move(movement * Time.deltaTime);
 	  
-		// TODO set animation to reflect motion
-	//animator.SetFloat("speed",moveVertical*speed);
+			// TODO set animation to reflect motion
+			//animator.SetFloat("speed",moveVertical*speed);
 	  
-	  if (Input.GetKey ("escape")) {
-	     Application.Quit();
-	  }
+			if (Input.GetKey ("escape")) {
+				Application.Quit ();
+			}
 	  
-	  if (Input.GetKey(run))
-	  {
-	    animator.SetBool("running",true);
-	  }
-	  else
-	  {
-	    animator.SetBool("running",false);
-	  }
+			if (Input.GetKey (run)) {
+				animator.SetBool ("running", true);
+			} else {
+				animator.SetBool ("running", false);
+			}
 	  
-	  Vector3 rot = transform.localEulerAngles;
-		// TODO set rotation to reflect motio 
-	  //rotation += moveHorizontal * turnSpeed;
-	  rot.y = rotation;
-	  transform.localEulerAngles = rot;
-		if (eatenDot) {
-			eatenDot=false;
-			AudioSource.PlayClipAtPoint(dotSound, transform.position);
-			gameController.GetComponent<GameController> ().pillsInWorld--;
-			gameController.GetComponent<GameController> ().updateScore ();
+			Vector3 rot = transform.localEulerAngles;
+			// TODO set rotation to reflect motio 
+			//rotation += moveHorizontal * turnSpeed;
+			rot.y = rotation;
+			transform.localEulerAngles = rot;
+			if (eatenDot) {
+				eatenDot = false;
+				AudioSource.PlayClipAtPoint (dotSound, transform.position);
+				gameController.GetComponent<GameController> ().pillsInWorld--;
+				gameController.GetComponent<GameController> ().updateScore ();
 						
+			}
 		}
 
 	}
@@ -123,7 +126,7 @@ public class PlayerControls : MonoBehaviour {
 		if (mazeManager.hasVisited (Mathf.RoundToInt(cell.x), Mathf.RoundToInt(cell.y))) {
 			return 1; // no pill
 		} else {
-			return -10; // is pill
+			return 10; // is pill
 		}
 	}
 	// Manhattan distance on a square grid
@@ -171,9 +174,10 @@ public class PlayerControls : MonoBehaviour {
 					path.append(current)
 		}
 	}*/
-	Vector3 findRoute(Vector2 current) {
+	Vector3 findRoute(Vector3 current) {
+		hasVisited.Clear ();
 		int maxScore = 0;
-		Vector2 nextCell = current;
+		Vector2 nextCell = new Vector2 (current.x, current.z);
 		List<Vector2> neighbours = mazeManager.getRoutes (current);
 
 		for (int i=0; i<neighbours.Count; i++) {

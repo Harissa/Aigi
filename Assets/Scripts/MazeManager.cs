@@ -51,7 +51,7 @@ public class MazeManager : MonoBehaviour
 		{
 				return ghosts;
 		}
-	public  List<Vector2> getRoutes(Vector2 centreCell) {
+	public  List<Vector2> getRoutes(Vector3 centreCell) {
 		return currentMaze.getRoutes (centreCell);
 	}
 	public bool hasVisited (int x, int y) {
@@ -156,7 +156,7 @@ public class MazeManager : MonoBehaviour
 
 				GameObject newWall = (GameObject)Instantiate (wallPrefab, position + offset, Quaternion.Euler (rotate));
 				newWall.transform.parent = transform;
-		Debug.Log ("Make wall at " + (position + offset).ToString ());
+		//Debug.Log ("Make wall at " + (position + offset).ToString ());
 		}
 
 		GameObject makePill (int x, int y, Vector3 offset, Vector3 rotate)
