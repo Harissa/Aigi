@@ -93,22 +93,22 @@ public class Maze
 		{
 				visited [x, y] = hasVisited;
 		}
-	public List<Vector2> getRoutes(Vector3 centreCell) {
+	public List<Vector3> getRoutes(Vector3 centreCell) {
 	//	Debug.Log ("get routes centre=" + centreCell.ToString ());
 		int cellX = Mathf.RoundToInt (centreCell.x);
 		int cellY = Mathf.RoundToInt (centreCell.z);
-		List<Vector2> routes = new List<Vector2> ();
+		List<Vector3> routes = new List<Vector3> ();
 		if ((!hasDirection (cellX, cellY, Directions.N)) && (!validHasDirection (cellX, cellY - 1, Directions.S))) {
-			routes.Add (new Vector2 (cellX, cellY - 1));
+			routes.Add (new Vector3 (cellX, 0,cellY - 1));
 		}
 		if ((!hasDirection (cellX, cellY, Directions.S)) && (!validHasDirection (cellX, cellY + 1, Directions.N))) {
-			routes.Add (new Vector2 (cellX, cellY + 1));
+			routes.Add (new Vector3 (cellX,0,cellY + 1));
 		}
 		if ((!hasDirection (cellX, cellY, Directions.W)) && (!validHasDirection (cellX - 1, cellY, Directions.E))) {
-			routes.Add (new Vector2 (cellX - 1, cellY));
+			routes.Add (new Vector3 (cellX - 1, 0,cellY));
 		}
 		if ((!hasDirection (cellX, cellY, Directions.E)) && (!validHasDirection (cellX + 1, cellY, Directions.W))) {
-			routes.Add (new Vector2 (cellX+1, cellY));
+			routes.Add (new Vector3 (cellX+1,0, cellY));
 		}
 		return routes;
 	}

@@ -40,6 +40,7 @@ public class MiniMap : MonoBehaviour
 				if (visible) {
 						makeGhostIcons ();
 				}
+
 		}
 		public void centreMap() {
 		offset = new Vector3 (-(mazeManager.width / 2.0f), 0, -(mazeManager.height / 2.0f));
@@ -68,16 +69,22 @@ public class MiniMap : MonoBehaviour
 				if (visible) {
 						Vector3 playerPos = player.transform.position;
 						playerIcon.transform.localPosition = player.transform.position+offset;
-						//Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x + (mazeManager.width / 2.0f) - 0.5f), Mathf.Round (playerPos.z + (mazeManager.height / 2.0f) - 0.5f));
 						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x), Mathf.Round (playerPos.z));
 
 						if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
-								drawCell ((int)cellPos.x, (int)cellPos.y);
+								//drawCell ((int)cellPos.x, (int)cellPos.y);
 								mazeManager.currentMaze.setVisited ((int)cellPos.x, (int)cellPos.y, true);
 						}
 						
 				}
 		}
+		public void drawWholeMap() {
+		for (int x=0; x<mazeManager.currentMaze.width; x++) {
+			for (int y=0; y<mazeManager.currentMaze.height; y++) {
+				drawCell (x, y);
+			}
+		}
+	}
 
 		void drawCell (int x, int y)
 		{

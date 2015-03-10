@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
-public class PlayerControls : MonoBehaviour {
+public class PlayerControls : MonoBehaviour
+{
 
 
 	public float speed;
@@ -15,40 +15,42 @@ public class PlayerControls : MonoBehaviour {
 	public float turnSpeed;
 	public GameObject mainMap;
 	public AudioClip dotSound;
-
-	
 	public KeyCode run;
 	private MazeManager mazeManager;
 	private GameObject gameController;
-	private bool eatenDot=false;
-	
+	private bool eatenDot = false;
 	private CharacterController cController;
 	private Animator animator;
-
-	private bool paused=true;
+	private bool paused = true;
 	private Vector3 currentCell;
 	private Vector3 nextCell;
+	private Vector3 lastCell;
 	private Hashtable hasVisited = new Hashtable ();
 	
 	// Use this for initialization
-	void Start () {
-	  cController = GetComponent<CharacterController>();
-	  gameController = GameObject.FindWithTag("GameController");
-	  animator = GetComponent<Animator>();
-	mazeManager = mainMap.GetComponent<MazeManager> ();
+	void Start ()
+	{
+		cController = GetComponent<CharacterController> ();
+		gameController = GameObject.FindWithTag ("GameController");
+		animator = GetComponent<Animator> ();
+		mazeManager = mainMap.GetComponent<MazeManager> ();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 	  
 	}
-	public void setStartPos(float x, float y) {
+
+	public void setStartPos (float x, float y)
+	{
 		transform.position = new Vector3 (x, 0, y);
 		currentCell.x = Mathf.Round (x);
-		currentCell.y = Mathf.Round (0);
+		currentCell.y = 0;
 		currentCell.z = Mathf.Round (y);
-		nextCell = findRoute (currentCell);
-		Debug.Log ("Current cell="+currentCell.ToString ()+"next="+nextCell.ToString ());
+		lastCell = currentCell;
+		nextCell = findRoute (currentCell, lastCell);
+		Debug.Log ("Current cell=" + currentCell.ToString () + "next=" + nextCell.ToString ());
 		paused = false;
 
 	}
@@ -59,7 +61,8 @@ public class PlayerControls : MonoBehaviour {
 			currentCell.x = Mathf.Round (transform.position.x);
 			currentCell.z = Mathf.Round (transform.position.z);
 			if (currentCell.Equals (nextCell)) {
-				nextCell = findRoute (currentCell);
+				nextCell = findRoute (currentCell, lastCell);
+				lastCell = currentCell;
 				Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
 			}
 
@@ -101,37 +104,37 @@ public class PlayerControls : MonoBehaviour {
 
 	}
 	
-	void OnTriggerEnter(Collider other)
+	void OnTriggerEnter (Collider other)
 	{
-	  if (other.gameObject.tag == "Monster")
-	  {
-		  Debug.Log ("Hit a ghost");
-		  gameController.GetComponent<GameController>().playerDied();
-	  }
+		if (other.gameObject.tag == "Monster") {
+			Debug.Log ("Hit a ghost");
+			gameController.GetComponent<GameController> ().playerDied ();
+		}
 	  
-	  if (other.gameObject.tag == "Pill")
-	  {
-	      Debug.Log ("eat pill "+other.gameObject.GetComponent<Pill>().index);
+		if (other.gameObject.tag == "Pill") {
+			Debug.Log ("eat pill " + other.gameObject.GetComponent<Pill> ().index);
 
-	      if (!other.gameObject.GetComponent<Pill>().collected)
-	      {
-		  eatenDot=true;
-		  other.gameObject.GetComponent<Pill>().onPickup();
-	      }
+			if (!other.gameObject.GetComponent<Pill> ().collected) {
+				eatenDot = true;
+				other.gameObject.GetComponent<Pill> ().onPickup ();
+			}
 		   		
 
-	  }
-    }
-	int mazeScore(Vector2 cell) {
-		if (mazeManager.hasVisited (Mathf.RoundToInt(cell.x), Mathf.RoundToInt(cell.y))) {
-			return 1; // no pill
+		}
+	}
+
+	int mazeScore (Vector2 cell)
+	{
+		if (mazeManager.hasVisited (Mathf.RoundToInt (cell.x), Mathf.RoundToInt (cell.y))) {
+			return -1; // no pill
 		} else {
-			return 10; // is pill
+			return 5; // is pill
 		}
 	}
 	// Manhattan distance on a square grid
-	int heuristic(Vector2 first, Vector2 second) {
-		return Mathf.RoundToInt(Mathf.Abs (first.x - second.x) + Mathf.Abs (first.y - second.y));
+	int heuristic (Vector2 first, Vector2 second)
+	{
+		return Mathf.RoundToInt (Mathf.Abs (first.x - second.x) + Mathf.Abs (first.y - second.y));
 	}
 
 	// TODO
@@ -174,35 +177,42 @@ public class PlayerControls : MonoBehaviour {
 					path.append(current)
 		}
 	}*/
-	Vector3 findRoute(Vector3 current) {
+	Vector3 findRoute (Vector3 current, Vector3 lastCell)
+	{
 		hasVisited.Clear ();
-		int maxScore = 0;
-		Vector2 nextCell = new Vector2 (current.x, current.z);
-		List<Vector2> neighbours = mazeManager.getRoutes (current);
+		int maxScore = -99;
+		Vector3 nextCell = currentCell;
+		hasVisited [current] = true;
+		List<Vector3> neighbours = mazeManager.getRoutes (current);
 
 		for (int i=0; i<neighbours.Count; i++) {
-			int neighbourScore = getScore (neighbours[i]);
-			if (neighbourScore>maxScore) {
-				nextCell = neighbours[i];
+			int neighbourScore = getScore (neighbours [i],1);
+			if (neighbours [i] == lastCell) {
+				neighbourScore--;
+			}
+			if (neighbourScore > maxScore) {
+				nextCell = neighbours [i];
 				maxScore = neighbourScore;
 			}
 		}
-		return new Vector3 (nextCell.x, 0, nextCell.y);
+		return nextCell;
 	}
-	int getScore(Vector2 current) {
+
+	int getScore (Vector3 current,int distance)
+	{
 		hasVisited [current] = true;
-		List<Vector2> neighbours = mazeManager.getRoutes (current);
-		int maxScore = 0;
-		int thisScore = mazeScore (current);
+		List<Vector3> neighbours = mazeManager.getRoutes (current);
+		int maxScore = -99;
+		int thisScore = mazeScore (current) - distance;
 		for (int i=0; i<neighbours.Count; i++) {
-			if (!hasVisited.Contains (neighbours[i])) {
-				float neighbourScore = getScore (neighbours [i]);
+			if (!hasVisited.Contains (neighbours [i])) {
+				int neighbourScore = getScore (neighbours [i],distance+1);
 				if (neighbourScore > maxScore) {
-					maxScore = thisScore;
+					maxScore = neighbourScore;
 				}
 			}
 		}
-		return (thisScore+maxScore);
+		return (thisScore + maxScore);
 	}
 
 }
