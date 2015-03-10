@@ -57,6 +57,9 @@ public class MazeManager : MonoBehaviour
 	public bool hasVisited (int x, int y) {
 		return currentMaze.hasVisited (x, y);
 	}
+	public void eatenPill(Vector3 pillPosition) {
+		currentMaze.setVisited (Mathf.RoundToInt(pillPosition.x), Mathf.RoundToInt(pillPosition.z), true);
+	}
 
 		void removeCurrentMaze ()
 		{

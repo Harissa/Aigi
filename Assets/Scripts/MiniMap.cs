@@ -72,7 +72,7 @@ public class MiniMap : MonoBehaviour
 						Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x), Mathf.Round (playerPos.z));
 
 						if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
-								//drawCell ((int)cellPos.x, (int)cellPos.y);
+								drawCell ((int)cellPos.x, (int)cellPos.y);
 								mazeManager.currentMaze.setVisited ((int)cellPos.x, (int)cellPos.y, true);
 						}
 						

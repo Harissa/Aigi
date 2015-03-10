@@ -116,23 +116,26 @@ public class PlayerControls : MonoBehaviour
 		}
 	  
 		if (other.gameObject.tag == "Pill") {
-			Debug.Log ("eat pill " + other.gameObject.GetComponent<Pill> ().index);
+			Pill thePill = other.gameObject.GetComponent<Pill> ();
+			Debug.Log ("eat pill " + thePill.index+"pos="+thePill.transform.position);
 
-			if (!other.gameObject.GetComponent<Pill> ().collected) {
+			if (!thePill.collected) {
 				eatenDot = true;
-				other.gameObject.GetComponent<Pill> ().onPickup ();
+				thePill.onPickup ();
+				//mazeManager.eatenPill(thePill.transform.position);
+
 			}
 		   		
 
 		}
 	}
 
-	int mazeScore (Vector2 cell)
+	int mazeScore (Vector3 cell)
 	{
-		if (mazeManager.hasVisited (Mathf.RoundToInt (cell.x), Mathf.RoundToInt (cell.y))) {
-			return -1; // no pill
+		if (mazeManager.hasVisited (Mathf.RoundToInt (cell.x), Mathf.RoundToInt (cell.z))) {
+			return 0; // no pill
 		} else {
-			return 5; // is pill
+			return 10; // is pill
 		}
 	}
 	// Manhattan distance on a square grid
@@ -207,7 +210,7 @@ public class PlayerControls : MonoBehaviour
 		hasVisited [current] = true;
 		List<Vector3> neighbours = mazeManager.getRoutes (current);
 		int maxScore = -99;
-		int thisScore = mazeScore (current) - distance;
+		int thisScore = mazeScore (current) / (distance * distance);
 		for (int i=0; i<neighbours.Count; i++) {
 			if (!hasVisited.Contains (neighbours [i])) {
 				int neighbourScore = getScore (neighbours [i],distance+1);
