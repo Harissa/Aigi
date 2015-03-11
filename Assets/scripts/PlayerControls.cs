@@ -68,35 +68,38 @@ public class PlayerControls : MonoBehaviour
 				//Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
 			}
 
-			//float moveHorizontal = Input.GetAxis("Horizontal");
-			//float moveVertical = Input.GetAxis("Vertical");
-			//Vector3 movement = new Vector3(0.0f,0.0f,1.0f) * speed;
-			float step = speed * Time.deltaTime;
-			transform.position = Vector3.MoveTowards (transform.position, nextCell, step);
-			transform.LookAt(nextCell);
 
-			//movement = transform.TransformDirection(movement);
-			//movement.y += yVelocity;
-			//cController.Move(movement * Time.deltaTime);
+		
+			float step = speed * Time.deltaTime;
+	
+			animator.SetFloat("speed",speed);
+
+
+
 	  
 			// TODO set animation to reflect motion
-			//animator.SetFloat("speed",moveVertical*speed);
+
 	  
 			if (Input.GetKey ("escape")) {
 				Application.Quit ();
 			}
 	  
-			if (Input.GetKey (run)) {
-				animator.SetBool ("running", true);
-			} else {
+			//if (Input.GetKey (run)) {
+			//	animator.SetBool ("running", true);
+			//} else {
 				animator.SetBool ("running", false);
-			}
-	  
-			//Vector3 rot = transform.localEulerAngles;
-			// TODO set rotation to reflect motio 
-			//rotation += moveHorizontal * turnSpeed;
-			//rot.y = rotation;
-			//transform.localEulerAngles = rot;
+			//}
+
+			//find the vector pointing from our position to the target
+			Vector3 _direction = (nextCell - transform.position).normalized;
+			
+			//create the rotation we need to be in to look at the target
+			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+			
+			//rotate us over time according to speed until we are in the required rotation
+			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime *turnSpeed);
+
+
 			if (eatenDot) {
 				eatenDot = false;
 				AudioSource.PlayClipAtPoint (dotSound, transform.position);
