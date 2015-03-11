@@ -109,7 +109,7 @@ public class MazeManager : MonoBehaviour
 			noOfGhosts = newLevel - 1;
 		}
 		// Todo
-		//noOfGhosts = 1;
+		noOfGhosts = 0;
 
 		for (int i=0; i<noOfGhosts; i++) {
 			ghosts.Add (makeGhost (i+1));
@@ -214,34 +214,35 @@ public class MazeManager : MonoBehaviour
 
 	public void setGhostPositions ()
 	{
-		Vector2 pos = Vector2.zero;
 		for (int i=0; i<ghosts.Count; i++) {
-
-			switch (Random.Range (0, 3)) {
-			case 0:
-				pos = new Vector2 (Random.Range (0, width - 1), 0);
-				break;
-			case 1:
-				pos = new Vector2 (Random.Range (0, width - 1), height - 1);
-				break;
-			case 2:
-				pos = new Vector2 (0, Random.Range (0, height - 1));
-				break;
-			case 3:
-				pos = new Vector2 (width - 1, Random.Range (0, height - 1));
-				break;
-			}
-			 
-			//Vector3 position = new Vector3 (cellWidth * (pos.x - (width / 2.0f)), 0, cellHeight * (pos.y - (height / 2.0f))) + transform.position;
-			Vector3 position = new Vector3 (cellWidth * pos.x, 0, cellHeight * pos.y) + transform.position;
-
-			//Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
-			ghosts [i].transform.position = position;// + offset;
+			setGhostPosition (ghosts[i]);
 			ghosts [i].GetComponent<GhostBillboard> ().clearStack ();
 		}
+		GameObject boss = (GameObject)GameObject.Find ("BossGhost");
+		setGhostPosition(boss);
 	}
-
-	public void enableGhostSounds (bool areEnabled)
+	void setGhostPosition(GameObject theGhost) {
+		Vector2 pos = Vector2.zero;
+		switch (Random.Range (0, 3)) {
+		case 0:
+			pos = new Vector2 (Random.Range (0, width - 1), 0);
+			break;
+		case 1:
+			pos = new Vector2 (Random.Range (0, width - 1), height - 1);
+			break;
+		case 2:
+			pos = new Vector2 (0, Random.Range (0, height - 1));
+			break;
+		case 3:
+			pos = new Vector2 (width - 1, Random.Range (0, height - 1));
+			break;
+		}
+		
+		Vector3 position = new Vector3 (cellWidth * pos.x, 0, cellHeight * pos.y) + transform.position;
+		theGhost.transform.position = position;// + offset;
+	}
+		
+		public void enableGhostSounds (bool areEnabled)
 	{
 		for (int i=0; i<ghosts.Count; i++) {
 			ghosts [i].GetComponent<GhostBillboard> ().enableSound (areEnabled);
