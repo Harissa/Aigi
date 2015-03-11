@@ -50,7 +50,7 @@ public class PlayerControls : MonoBehaviour
 		currentCell.z = Mathf.Round (y);
 		lastCell = currentCell;
 		nextCell = findRoute (currentCell, lastCell);
-		//Debug.Log ("Current cell=" + currentCell.ToString () + "next=" + nextCell.ToString ());
+		Debug.Log ("Current cell=" + currentCell.ToString () + "next=" + nextCell.ToString ());
 		paused = false;
 
 	}
@@ -60,12 +60,12 @@ public class PlayerControls : MonoBehaviour
 		if (!paused) {
 
 		
-			if ((Vector3.Distance (nextCell, transform.position) < 0.2)) {
+			if ((Vector3.Distance (nextCell, transform.position) < 0.4)) {
 				currentCell.x = Mathf.Round (transform.position.x);
 				currentCell.z = Mathf.Round (transform.position.z);
 				nextCell = findRoute (currentCell, lastCell);
 				lastCell = currentCell;
-				//Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
+				Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
 			}
 
 
@@ -120,7 +120,7 @@ public class PlayerControls : MonoBehaviour
 	  
 		if (other.gameObject.tag == "Pill") {
 			Pill thePill = other.gameObject.GetComponent<Pill> ();
-			Debug.Log ("eat pill " + thePill.index + "pos=" + thePill.transform.position);
+			//Debug.Log ("eat pill " + thePill.index + "pos=" + thePill.transform.position);
 
 			if (!thePill.collected) {
 				eatenDot = true;
@@ -141,12 +141,28 @@ public class PlayerControls : MonoBehaviour
 			return -100; // ghost don't go there
 		} else {
 			if (mazeManager.hasVisited (x, y)) {
-				return 0; // no pill
+				return 1; // no pill
 			} else {
 				return 10; // is pill
 			}
 		} 
 
+	}
+
+	int mazeCost (Vector3 cell)
+	{
+		int x = Mathf.RoundToInt (cell.x);
+		int y = Mathf.RoundToInt (cell.z);
+		if (mazeManager.isGhostPosition (x, y)) {
+			return 100;//-100; // ghost don't go there
+		} else {
+			if (mazeManager.hasVisited (x, y)) {
+				return 10; // no pill
+			} else {
+				return 1; // is pill
+			}
+		} 
+		
 	}
 	// Manhattan distance on a square grid
 	int heuristic (Vector2 first, Vector2 second)
@@ -164,37 +180,73 @@ public class PlayerControls : MonoBehaviour
 	// How do we know what is the best route ***
 	// hmm, should I have used a tree weighing algorithm?
 
-	/*void findRoute(Vector2 startCell) {
+	Vector3 findRoute (Vector3 startCell, Vector3 lastCell)
+	{
 
-		PriorityQueue<int,Vector2> frontier = new PriorityQueue<int,Vector2> ();
-		frontier.Enqueue (startCell,0); 
+		PriorityQueue<float,Vector3> frontier = new PriorityQueue<float,Vector3> ();
+		frontier.Enqueue (startCell, 0); 
 		Hashtable cameFrom = new Hashtable ();
 		Hashtable costSoFar = new Hashtable ();
-		cameFrom.Add (startCell, null);
-		//costSoFar.Add (Start, 0);
-		costSoFar [startCell] = 0;
+		Hashtable scoreSoFar = new Hashtable ();
+		cameFrom [startCell] = null;
+		costSoFar [startCell] = 0.0f;
+		scoreSoFar [startCell] = 0.0f;
+		float highestScore = 0.0f;
+		float score;
+		Vector3 bestDestination = startCell;
+		List<Vector3> neighbours;
 
 		while (!frontier.IsEmpty) {
-			Vector2 current = frontier.Dequeue ();
-			List<Vector2> neighbours = maze.getRoutes (current);
+			Vector3 current = frontier.Dequeue ();
+			neighbours = mazeManager.getRoutes (current);
 			for (int i=0; i<neighbours.Count; i++) {
-				int newCost = costSoFar.GetObjectData(current) + mazeCost(current,neighbours[i]);
+				float newCost = (float)costSoFar [current] + 1.0f;
+				if (neighbours[i].Equals (lastCell)) {
+					newCost+=2;
+				}
+
 				// if we haven't come here before or have a better way then add
-				if (!costSoFar.Contains (neighbours[i]) || (newCost < costSoFar.GetObjectData(neighbours[i]))) {
-					costSoFar.Add(neighbours[i],newCost);
-					int priority = newCost + heuristic(startCell,neighbours[i]);
-					frontier.Enqueue(neighbours[i],priority); 
-					cameFrom.Add (neighbours[i],current);
+				if (!costSoFar.Contains (neighbours [i]) || (newCost < (float)costSoFar [neighbours [i]])) {
+					score = mazeScore (neighbours [i]);
+					costSoFar [neighbours [i]] = newCost;
+					scoreSoFar [neighbours [i]] = (float)scoreSoFar [current] + score;
+					float priority = newCost;
+					if ((float)scoreSoFar [neighbours [i]] > highestScore) {
+						highestScore = (float)scoreSoFar [neighbours [i]];
+						bestDestination = neighbours [i];
+					}
+					frontier.Enqueue (neighbours [i], priority); 
+					cameFrom [neighbours [i]] = current;
 				}
 			}
-			current = goal
-				path = [current]
-				while current != start:
-					current = came_from[current] 
-					path.append(current)
+
 		}
-	}*/
-	Vector3 findRoute (Vector3 current, Vector3 lastCell)
+		Vector3 nextCell = bestDestination;
+		//if (cameFrom.ContainsKey (bestDestination)) {
+		bool atEnd = false;
+		while (!atEnd) {
+			if (bestDestination.Equals (startCell)) {
+				atEnd = true;
+			} else {
+				nextCell = bestDestination;
+				bestDestination = (Vector3)cameFrom [bestDestination];
+				/*if (cameFrom.ContainsKey (bestDestination) && (bestDestination != null)) {
+						bestDestination = (Vector3)cameFrom [bestDestination];
+					} else {
+						Debug.Log ("came from does not contain " + bestDestination);
+						atEnd = true;
+					}*/
+			}
+		}
+		//} else {
+		//		Debug.Log ("choosing random route");
+		//		neighbours = mazeManager.getRoutes (startCell);
+		//		nextCell = neighbours [Random.Range (0, neighbours.Count - 1)];
+		//	}
+		return nextCell;
+
+	}
+	/*Vector3 findRoute (Vector3 current, Vector3 lastCell)
 	{
 		hasVisited.Clear ();
 		float maxScore = -99;
@@ -220,7 +272,7 @@ public class PlayerControls : MonoBehaviour
 		hasVisited [current] = true;
 		List<Vector3> neighbours = mazeManager.getRoutes (current);
 		float maxScore = 0;
-		float thisScore = mazeScore (current) / (distance * distance);
+		float thisScore = mazeScore (current) / distance;
 		for (int i=0; i<neighbours.Count; i++) {
 			if (!hasVisited.Contains (neighbours [i])) {
 				float neighbourScore = getScore (neighbours [i], distance + 1);
@@ -231,6 +283,6 @@ public class PlayerControls : MonoBehaviour
 		}
 		return (thisScore + maxScore);
 	}
-
+*/
 }
 

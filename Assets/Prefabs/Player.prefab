@@ -2620,7 +2620,7 @@ MonoBehaviour:
   speed: .5
   jumpSpeed: 5
   gravity: .800000012
-  turnSpeed: 5
+  turnSpeed: 10
   mainMap: {fileID: 0}
   dotSound: {fileID: 8300000, guid: bea376a625abb4048b384b0e17b9103e, type: 3}
   run: 304

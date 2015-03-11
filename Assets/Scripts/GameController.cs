@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 
 	void startGame ()
 	{
-		level = 2;//1;
+		level = 1;//1;
 		lives = 3;
 		updateLevel ();
 		updateLives ();
@@ -251,7 +251,7 @@ public class GameController : MonoBehaviour
 	
 	public void updateScore ()
 	{
-		Debug.Log ("update score");
+		//Debug.Log ("update score");
 		scoreText.text = "Dots left: " + pillsInWorld.ToString ();
 	}
 
