@@ -60,7 +60,7 @@ public class PlayerControls : MonoBehaviour
 		if (!paused) {
 
 		
-			if ((Vector3.Distance (nextCell,transform.position)<0.2)) {
+			if ((Vector3.Distance (nextCell, transform.position) < 0.2)) {
 				currentCell.x = Mathf.Round (transform.position.x);
 				currentCell.z = Mathf.Round (transform.position.z);
 				nextCell = findRoute (currentCell, lastCell);
@@ -72,7 +72,7 @@ public class PlayerControls : MonoBehaviour
 		
 			float step = speed * Time.deltaTime;
 	
-			animator.SetFloat("speed",speed);
+			animator.SetFloat ("speed", speed);
 
 
 
@@ -87,17 +87,17 @@ public class PlayerControls : MonoBehaviour
 			//if (Input.GetKey (run)) {
 			//	animator.SetBool ("running", true);
 			//} else {
-				animator.SetBool ("running", false);
+			animator.SetBool ("running", false);
 			//}
 
 			//find the vector pointing from our position to the target
 			Vector3 _direction = (nextCell - transform.position).normalized;
 			
 			//create the rotation we need to be in to look at the target
-			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+			Quaternion _lookRotation = Quaternion.LookRotation (_direction);
 			
 			//rotate us over time according to speed until we are in the required rotation
-			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime *turnSpeed);
+			transform.rotation = Quaternion.Slerp (transform.rotation, _lookRotation, Time.deltaTime * turnSpeed);
 
 
 			if (eatenDot) {
@@ -120,7 +120,7 @@ public class PlayerControls : MonoBehaviour
 	  
 		if (other.gameObject.tag == "Pill") {
 			Pill thePill = other.gameObject.GetComponent<Pill> ();
-			Debug.Log ("eat pill " + thePill.index+"pos="+thePill.transform.position);
+			Debug.Log ("eat pill " + thePill.index + "pos=" + thePill.transform.position);
 
 			if (!thePill.collected) {
 				eatenDot = true;
@@ -135,11 +135,18 @@ public class PlayerControls : MonoBehaviour
 
 	int mazeScore (Vector3 cell)
 	{
-		if (mazeManager.hasVisited (Mathf.RoundToInt (cell.x), Mathf.RoundToInt (cell.z))) {
-			return 0; // no pill
+		int x = Mathf.RoundToInt (cell.x);
+		int y = Mathf.RoundToInt (cell.z);
+		if (mazeManager.isGhostPosition (x, y)) {
+			return -100; // ghost don't go there
 		} else {
-			return 10; // is pill
-		}
+			if (mazeManager.hasVisited (x, y)) {
+				return 0; // no pill
+			} else {
+				return 10; // is pill
+			}
+		} 
+
 	}
 	// Manhattan distance on a square grid
 	int heuristic (Vector2 first, Vector2 second)
@@ -190,15 +197,15 @@ public class PlayerControls : MonoBehaviour
 	Vector3 findRoute (Vector3 current, Vector3 lastCell)
 	{
 		hasVisited.Clear ();
-		int maxScore = -99;
+		float maxScore = -99;
 		Vector3 nextCell = currentCell;
 		hasVisited [current] = true;
 		List<Vector3> neighbours = mazeManager.getRoutes (current);
 
 		for (int i=0; i<neighbours.Count; i++) {
-			int neighbourScore = getScore (neighbours [i],1);
+			float neighbourScore = getScore (neighbours [i], 1);
 			if (neighbours [i] == lastCell) {
-				neighbourScore--;
+				neighbourScore /= 2;
 			}
 			if (neighbourScore > maxScore) {
 				nextCell = neighbours [i];
@@ -208,21 +215,21 @@ public class PlayerControls : MonoBehaviour
 		return nextCell;
 	}
 
-	int getScore (Vector3 current,int distance)
+	float getScore (Vector3 current, int distance)
 	{
 		hasVisited [current] = true;
 		List<Vector3> neighbours = mazeManager.getRoutes (current);
-		int maxScore = -99;
-		int thisScore = mazeScore (current) / (distance * distance);
+		float maxScore = 0;
+		float thisScore = mazeScore (current) / (distance * distance);
 		for (int i=0; i<neighbours.Count; i++) {
 			if (!hasVisited.Contains (neighbours [i])) {
-				int neighbourScore = getScore (neighbours [i],distance+1);
-				if (neighbourScore > maxScore) {
+				float neighbourScore = getScore (neighbours [i], distance + 1);
+				if (neighbourScore > Mathf.Abs (maxScore)) {
 					maxScore = neighbourScore;
 				}
 			}
 		}
-		return (thisScore + Mathf.Max (maxScore,0));
+		return (thisScore + maxScore);
 	}
 
 }

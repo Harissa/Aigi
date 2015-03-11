@@ -24,6 +24,7 @@ public class MazeManager : MonoBehaviour
 	public Maze currentMaze;
 	private MazeBuilder builder;
 	private List<GameObject> ghosts;
+	private GameObject boss;
 
 	void Start ()
 	{
@@ -114,10 +115,17 @@ public class MazeManager : MonoBehaviour
 		for (int i=0; i<noOfGhosts; i++) {
 			ghosts.Add (makeGhost (i+1));
 		}
-				
-				
 
 		setGhostPositions ();
+	}
+	// Not very efficient
+	public bool isGhostPosition(int x,int y) {
+		Vector2 bossPosition = new Vector2 (Mathf.Round (boss.transform.position.x), Mathf.Round (boss.transform.position.z));
+		if ((bossPosition.x == x) && (bossPosition.y == y)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	// Goes through the Maze data structure and creates prefab blocks in the right places and orientation
@@ -218,7 +226,7 @@ public class MazeManager : MonoBehaviour
 			setGhostPosition (ghosts[i]);
 			ghosts [i].GetComponent<GhostBillboard> ().clearStack ();
 		}
-		GameObject boss = (GameObject)GameObject.Find ("BossGhost");
+		boss = (GameObject)GameObject.Find ("BossGhost");
 		setGhostPosition(boss);
 	}
 	void setGhostPosition(GameObject theGhost) {
