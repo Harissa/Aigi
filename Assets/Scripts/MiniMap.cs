@@ -36,7 +36,7 @@ public class MiniMap : MonoBehaviour
 		foreach (Transform aaa in transform)
 			if (aaa.gameObject.renderer)
 				aaa.gameObject.renderer.enabled = visible; 
-
+		playerIcon.SetActive (false);
 		if (visible) {
 			makeGhostIcons ();
 		}
@@ -83,13 +83,13 @@ public class MiniMap : MonoBehaviour
 	{
 		if (visible) {
 			Vector3 playerPos = player.transform.position;
-			playerIcon.transform.localPosition = player.transform.position + offset;
+			//playerIcon.transform.localPosition = player.transform.position + offset;
 			Vector2 cellPos = new Vector2 (Mathf.Round (playerPos.x), Mathf.Round (playerPos.z));
 
-			if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
-				drawCell ((int)cellPos.x, (int)cellPos.y);
-				mazeManager.currentMaze.setVisited ((int)cellPos.x, (int)cellPos.y, true);
-			}
+			//if (!mazeManager.currentMaze.hasVisited ((int)cellPos.x, (int)cellPos.y)) {
+				//drawCell ((int)cellPos.x, (int)cellPos.y);
+			//	mazeManager.currentMaze.setVisited ((int)cellPos.x, (int)cellPos.y, true);
+			//}
 						
 		}
 	}

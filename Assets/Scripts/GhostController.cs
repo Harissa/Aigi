@@ -48,7 +48,7 @@ public class GhostController : MonoBehaviour
 		if (boss == null) {
 			boss = GameObject.Find ("BossGhost").GetComponent<BossGhost> ();
 		}
-		commandState = GhostBehaviours.follow;
+		commandState = GhostBehaviours.search;
 		state = commandState;
 		currentCell.x = Mathf.Round (transform.position.x);
 		currentCell.z = Mathf.Round (transform.position.z);

@@ -149,9 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af6d86bb3fa314a708126eb379354d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: .300000012
+  speed: .5
   type: pinky
-  colour: {r: 1, g: .501960814, b: 1, a: 0}
   state: 0
 --- !u!135 &13500000
 SphereCollider:

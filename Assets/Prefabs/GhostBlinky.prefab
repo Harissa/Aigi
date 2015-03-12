@@ -287,7 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822b8a55569d140c687cfbc0e7d63d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: .300000012
+  speed: .5
+  colour: {r: 0, g: 0, b: 0, a: 0}
   turnSpeed: 5
 --- !u!124 &12438244
 Behaviour:

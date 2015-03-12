@@ -13,6 +13,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 135: {fileID: 13500000}
   - 82: {fileID: 8200000}
+  - 114: {fileID: 11418888}
   m_Layer: 0
   m_Name: GhostInky
   m_TagString: Monster
@@ -130,13 +131,27 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c01f80008ceec414780188ec44ac635a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .400000006
   type: inky
+--- !u!114 &11418888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af6d86bb3fa314a708126eb379354d67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: .5
+  type: inky
+  state: 0
 --- !u!135 &13500000
 SphereCollider:
   m_ObjectHideFlags: 1

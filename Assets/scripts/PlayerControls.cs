@@ -194,32 +194,37 @@ public class PlayerControls : MonoBehaviour
 		float highestScore = 0.0f;
 		float score;
 		Vector3 bestDestination = startCell;
+		Vector3 next;
 		List<Vector3> neighbours;
 
 		while (!frontier.IsEmpty) {
 			Vector3 current = frontier.Dequeue ();
 			neighbours = mazeManager.getRoutes (current);
 			for (int i=0; i<neighbours.Count; i++) {
-				float newCost = (float)costSoFar [current] + mazeCost (neighbours[i]);
-				if (neighbours[i].Equals (lastCell)) {
+				next = neighbours[i];
+				// Calculate cost
+				float newCost = (float)costSoFar [current] + mazeCost (next);
+				// if going backwards then add additional cost
+				if (next.Equals (lastCell)) {
 					newCost+=10;
 				}
-
 				// if we haven't come here before or have a better way then add
-				if (!costSoFar.Contains (neighbours [i]) || (newCost < (float)costSoFar [neighbours [i]])) {
-					score = mazeScore (neighbours [i])/newCost;
-					costSoFar [neighbours [i]] = newCost;
-					scoreSoFar [neighbours [i]] = (float)scoreSoFar [current] + score;
-					float priority = newCost;
-					if ((float)scoreSoFar [neighbours [i]] > highestScore) {
-						highestScore = (float)scoreSoFar [neighbours [i]];
-						bestDestination = neighbours [i];
+				if (!costSoFar.Contains (next) || (newCost < (float)costSoFar [next])) {
+
+					costSoFar [next] = newCost;
+					// Also calculate a score for each path
+					score = mazeScore (next)/newCost;
+					scoreSoFar [next] = (float)scoreSoFar [current] + score;
+					// If this path has the highest score then remember it
+					if ((float)scoreSoFar [next] > highestScore) {
+						highestScore = (float)scoreSoFar [next];
+						bestDestination = next;
 					}
-					frontier.Enqueue (neighbours [i], priority); 
-					cameFrom [neighbours [i]] = current;
+					float priority = newCost;
+					frontier.Enqueue (next, priority); 
+					cameFrom [next] = current;
 				}
 			}
-
 		}
 		Vector3 nextCell = bestDestination;
 		//if (cameFrom.ContainsKey (bestDestination)) {

@@ -81,7 +81,7 @@ public class MazeManager : MonoBehaviour
 
 	int getMazeSize (int level)
 	{
-		int size = Mathf.Clamp (level + 3, 4, 10);
+		int size = Mathf.Clamp (level + 4, 4, 10);
 		if (level == 1) {
 			size = 3;
 		}
