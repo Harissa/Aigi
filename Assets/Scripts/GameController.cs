@@ -84,6 +84,7 @@ public class GameController : MonoBehaviour
 		state = GameStates.intro;
 		failGUI.SetActive (false);
 		startGUI.SetActive (true);
+		gameGUI.SetActive (false);
 
 
 		loadLevel ();
@@ -94,6 +95,7 @@ public class GameController : MonoBehaviour
 	{
 		level++;
 		lives = 3;
+		updateLives ();
 		updateLevel ();
 		startLevel ();
 	}
@@ -222,13 +224,16 @@ public class GameController : MonoBehaviour
 		reachedText.text = "You reached level " + level.ToString ();
 		failGUI.SetActive (true);
 		Time.timeScale = 0;
-		state = GameStates.gameover;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-
+		if (state == GameStates.playing) {
+			if (pillsInWorld <= 0) {
+				gameOver ();
+			}
+		}
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			switch (state) {
 			case GameStates.intro:
@@ -247,9 +252,7 @@ public class GameController : MonoBehaviour
 	   
 		}
 	  
-		if (pillsInWorld <= 0) {
-			gameOver ();
-		}
+
 			//levelCompleted ();
 	}
 	

@@ -123,7 +123,7 @@ public class MazeManager : MonoBehaviour
 		List<Vector3> allGhosts = getAllGhostPositions ();
 
 		for(int i=0;i<allGhosts.Count;i++) {
-			if ((allGhosts[i].x==x) && (allGhosts[i].y==y)) {
+			if ((allGhosts[i].x==x) && (allGhosts[i].z==y)) {
 					return true;
 			}
 		}
