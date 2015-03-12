@@ -110,7 +110,7 @@ public class MazeManager : MonoBehaviour
 			noOfGhosts = newLevel - 1;
 		}
 		// Todo
-		noOfGhosts = 0;
+		//noOfGhosts = 0;
 
 		for (int i=0; i<noOfGhosts; i++) {
 			ghosts.Add (makeGhost (i+1));
@@ -124,9 +124,25 @@ public class MazeManager : MonoBehaviour
 		if ((bossPosition.x == x) && (bossPosition.y == y)) {
 			return true;
 		} else {
+			for(int i=0;i<ghosts.Count;i++) {
+				if ((Mathf.Round (ghosts[i].transform.position.x)==x) && (Mathf.Round (ghosts[i].transform.position.z)==y)) {
+					return true;
+				}
+			}
 			return false;
 		}
 	}
+	public List<Vector3> getAllGhostPositions() {
+		List<Vector3> positions = new List<Vector3> ();
+		positions.Add (new Vector3 (Mathf.Round (boss.transform.position.x), 0, Mathf.Round (boss.transform.position.z)));
+		for (int i=0; i<ghosts.Count; i++) {
+			positions.Add (new Vector3 (Mathf.Round (ghosts [i].transform.position.x), 0, Mathf.Round (ghosts [i].transform.position.z)));
+		}
+		return positions;
+	}
+		             
+
+
 
 	// Goes through the Maze data structure and creates prefab blocks in the right places and orientation
 	void drawMaze (Maze drawMaze)
@@ -193,7 +209,7 @@ public class MazeManager : MonoBehaviour
 	GameObject makeGhost (int i)
 	{
 	
-		GameObject prefab = blinkyPrefab;
+		GameObject prefab = pinkyPrefab;
 		if (i == 0)
 			prefab = blinkyPrefab;
 		else if (i == 1)
@@ -203,7 +219,7 @@ public class MazeManager : MonoBehaviour
 		else if (i == 3)
 			prefab = clydePrefab;
 		else {
-			int r = Random.Range (0, 3);
+			int r = Random.Range (1, 3);
 			if (r == 0)
 				prefab = blinkyPrefab;
 			else if (r == 1)

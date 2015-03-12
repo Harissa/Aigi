@@ -17,18 +17,13 @@ public class BossGhost : MonoBehaviour
 // Use this for initialization
 	void Start ()
 	{
-		//cController = GetComponent<CharacterController>();
+	
 		gameController = GameObject.FindWithTag ("GameController");
-		//animator = GetComponent<Animator>();
 		cam = Camera.main;
 	}
 
 
-	// Update is called once per frame
-	void Update ()
-	{
-		//transform.LookAt (transform.position + cam.transform.rotation * new Vector3 (0.0f, 0.0f, 1.0f), cam.transform.rotation * Vector3.up);
-	}
+
 
 	void FixedUpdate ()
 	{
