@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum GhostBehavours
+public enum GhostBehaviours
 {
 	search,
 	chase,
@@ -18,11 +18,15 @@ public class GhostController : MonoBehaviour
 	public string type;
 	private Maze maze;
 	private MazeManager mazeManager;
+	private PlayerControls player;
+	private BossGhost boss;
 	private Directions direction;
 	private Vector3 nextCell;
 	private Vector3 lastCell;
 	private Vector3 currentCell;
-	private GhostBehavours state;
+	public GhostBehaviours state;
+	private GhostBehaviours commandState;
+
 
 	/*
 	void Awake () {
@@ -33,6 +37,25 @@ public class GhostController : MonoBehaviour
 	void Start ()
 	{
 		cam = Camera.main;
+		if (maze == null)
+		{
+			mazeManager = GameObject.Find("MazeDrawer").GetComponent<MazeManager>();
+			maze = mazeManager.currentMaze;
+		}
+		if (player == null) {
+			player = GameObject.Find ("Player").GetComponent<PlayerControls> ();
+		}
+		if (boss == null) {
+			boss = GameObject.Find ("BossGhost").GetComponent<BossGhost> ();
+		}
+		commandState = GhostBehaviours.follow;
+		state = commandState;
+		currentCell.x = Mathf.Round (transform.position.x);
+		currentCell.z = Mathf.Round (transform.position.z);
+		nextCell = findRoute (currentCell, lastCell);
+		nextCell.y = transform.position.y;
+		lastCell = currentCell;
+
 	}
 	
 	// Update is called once per frame
@@ -285,13 +308,28 @@ public class GhostController : MonoBehaviour
 			audio.Stop ();
 		}
 	}
+	public Color getColour() {
+		switch (type) {
+		case "pinky":
+			return Color.magenta;
+			break;
+		case "clyde":
+			return Color.yellow;
+			break;
+		case "inky":
+			return Color.cyan;
+			break;
+		}
+		return Color.red;
+	}
 
 	float getRouteScore (Vector3 testCell)
 	{
 		float score = 0;
+		float playerDistance;
 		List<Vector3> allGhosts;
 		switch (state) {
-		case GhostBehavours.search:
+		case GhostBehaviours.search:
 			// find distance from each ghost
 			// add squares and take square root
 			allGhosts = mazeManager.getAllGhostPositions ();
@@ -300,7 +338,22 @@ public class GhostController : MonoBehaviour
 			}
 			score = Mathf.Sqrt (score);
 			break;
+		case GhostBehaviours.chase:
+			score = 100.0f/Vector3.Distance (testCell,player.transform.position);
+			break;
+		case GhostBehaviours.flank:
+			playerDistance = Vector3.Distance (boss.transform.position,player.transform.position);
+			allGhosts = mazeManager.getAllGhostPositions ();
+			for (int i=0; i<allGhosts.Count; i++) {
+				score += Mathf.Pow (playerDistance-Vector3.Distance (testCell, allGhosts [i]), 2);
+			}
+			score = 100.0f/Mathf.Sqrt (score);
+			break;
+		case GhostBehaviours.follow:
+			score = 100.0f/Vector3.Distance (testCell,player.transform.position);
+			break;
 		}
+
 		return score;
 	}
 
@@ -311,11 +364,11 @@ public class GhostController : MonoBehaviour
 		Vector3 routeCell = startCell;
 		float eachScore;
 		for (int i=0; i<neighbours.Count; i++) {
-			if (!neighbours [i].Equals (lastCell)) {
+			/*if (neighbours [i].Equals (lastCell)) {
 				eachScore = 0;
-			} else {
+			} else {*/
 				eachScore = getRouteScore (neighbours [i]);
-			}
+			//}
 			if (eachScore >= bestRouteScore) {
 				routeCell = neighbours [i];
 				bestRouteScore = eachScore;
@@ -328,13 +381,20 @@ public class GhostController : MonoBehaviour
 	void FixedUpdate ()
 	{
 	  
+		if (maze.canSee (transform.position, player.transform.position, 3)) {
+			state = GhostBehaviours.chase;
+		} else {
+			state = commandState;
+		}
 		if ((Vector3.Distance (nextCell, transform.position) < 0.4)) {
 			currentCell.x = Mathf.Round (transform.position.x);
 			currentCell.z = Mathf.Round (transform.position.z);
 			nextCell = findRoute (currentCell, lastCell);
+			nextCell.y = transform.position.y;
 			lastCell = currentCell;
 			//Debug.Log ("current cell=" + currentCell.ToString () + "new next cell=" + nextCell.ToString ());
 		}
+
 	  
 		Vector3 direction = nextCell - transform.position;
 		float distanceToTarget = direction.magnitude;

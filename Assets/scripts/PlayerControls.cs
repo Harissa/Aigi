@@ -24,8 +24,8 @@ public class PlayerControls : MonoBehaviour
 	private bool paused = true;
 	private Vector3 currentCell;
 	private Vector3 nextCell;
-	private Vector3 lastCell;
-	private Hashtable hasVisited = new Hashtable ();
+	public Vector3 lastCell;
+//	private Hashtable hasVisited = new Hashtable ();
 	
 	// Use this for initialization
 	void Start ()

@@ -566,7 +566,7 @@ GUIText:
   m_GameObject: {fileID: 559561659}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: You lost a life
+  m_Text: You caught a thief
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
@@ -722,7 +722,7 @@ GUIText:
   m_GameObject: {fileID: 755756897}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: Collect dots, avoid ghosts
+  m_Text: Catch the thief!
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
@@ -1155,6 +1155,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 13200026, guid: 34cfd00ef2aad3049bcac312d290379d, type: 2}
+      propertyPath: m_Text
+      value: Catch the thief!
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200016, guid: 34cfd00ef2aad3049bcac312d290379d, type: 2}
+      propertyPath: m_Text
+      value: Gothca!
+      objectReference: {fileID: 0}
+    - target: {fileID: 13200008, guid: 34cfd00ef2aad3049bcac312d290379d, type: 2}
+      propertyPath: m_Text
+      value: You caught a thief
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 34cfd00ef2aad3049bcac312d290379d, type: 2}
   m_RootGameObject: {fileID: 490954218}
@@ -1227,7 +1239,7 @@ GUIText:
   m_GameObject: {fileID: 2107878151}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: Arggh!
+  m_Text: Gothca!
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}

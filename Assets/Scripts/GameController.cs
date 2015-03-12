@@ -76,7 +76,7 @@ public class GameController : MonoBehaviour
 
 	void startGame ()
 	{
-		level = 2;//1;
+		level = 1;//1;
 		lives = 3;
 		updateLevel ();
 		updateLives ();
@@ -93,6 +93,7 @@ public class GameController : MonoBehaviour
 	void nextLevel ()
 	{
 		level++;
+		lives = 3;
 		updateLevel ();
 		startLevel ();
 	}
@@ -191,7 +192,8 @@ public class GameController : MonoBehaviour
 		lives--;
 		updateLives ();
 		if (lives == 0) {
-			gameOver ();
+			levelCompleted ();
+			//gameOver ();
 		} else {
 			dieGUI.SetActive (true);
 			Time.timeScale = 0;
@@ -245,8 +247,10 @@ public class GameController : MonoBehaviour
 	   
 		}
 	  
-		if (pillsInWorld <= 0)
-			levelCompleted ();
+		if (pillsInWorld <= 0) {
+			gameOver ();
+		}
+			//levelCompleted ();
 	}
 	
 	public void updateScore ()
@@ -257,7 +261,7 @@ public class GameController : MonoBehaviour
 
 	public void updateLives ()
 	{
-		livesText.text = "Lives: " + lives.ToString ();
+		livesText.text = "Thieves: " + lives.ToString ();
 	}
 	
 	public void updateLevel ()

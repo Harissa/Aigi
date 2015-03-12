@@ -118,19 +118,17 @@ public class MazeManager : MonoBehaviour
 
 		setGhostPositions ();
 	}
-	// Not very efficient
+
 	public bool isGhostPosition(int x,int y) {
-		Vector2 bossPosition = new Vector2 (Mathf.Round (boss.transform.position.x), Mathf.Round (boss.transform.position.z));
-		if ((bossPosition.x == x) && (bossPosition.y == y)) {
-			return true;
-		} else {
-			for(int i=0;i<ghosts.Count;i++) {
-				if ((Mathf.Round (ghosts[i].transform.position.x)==x) && (Mathf.Round (ghosts[i].transform.position.z)==y)) {
+		List<Vector3> allGhosts = getAllGhostPositions ();
+
+		for(int i=0;i<allGhosts.Count;i++) {
+			if ((allGhosts[i].x==x) && (allGhosts[i].y==y)) {
 					return true;
-				}
 			}
-			return false;
 		}
+		return false;
+
 	}
 	public List<Vector3> getAllGhostPositions() {
 		List<Vector3> positions = new List<Vector3> ();

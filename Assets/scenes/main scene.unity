@@ -1018,6 +1018,18 @@ Prefab:
       propertyPath: m_Name
       value: BossGhost
       objectReference: {fileID: 0}
+    - target: {fileID: 11438246, guid: dec518acb58257943a98c5f5c57f9d0a, type: 2}
+      propertyPath: colour.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11438246, guid: dec518acb58257943a98c5f5c57f9d0a, type: 2}
+      propertyPath: colour.g
+      value: .0274509806
+      objectReference: {fileID: 0}
+    - target: {fileID: 11438246, guid: dec518acb58257943a98c5f5c57f9d0a, type: 2}
+      propertyPath: colour.b
+      value: .0274509806
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dec518acb58257943a98c5f5c57f9d0a, type: 2}
   m_RootGameObject: {fileID: 2036811933}
@@ -4289,6 +4301,7 @@ MonoBehaviour:
   mainMap: {fileID: 989643842}
   dotSound: {fileID: 8300000, guid: bea376a625abb4048b384b0e17b9103e, type: 3}
   run: 304
+  lastCell: {x: 0, y: 0, z: 0}
 --- !u!1 &1115922729
 GameObject:
   m_ObjectHideFlags: 0
@@ -7202,7 +7215,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 822b8a55569d140c687cfbc0e7d63d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: .5
+  speed: .300000012
+  colour: {r: 1, g: .0274509806, b: .0274509806, a: 0}
   turnSpeed: 5
 --- !u!23 &2036811937
 Renderer:

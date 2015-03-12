@@ -6,6 +6,7 @@ public class BossGhost : MonoBehaviour
 {
 
 	public float speed;
+	public Color colour;
 	private float rotation;
 	private float posX;
 	public float turnSpeed;

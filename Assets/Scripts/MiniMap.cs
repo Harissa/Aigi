@@ -54,20 +54,24 @@ public class MiniMap : MonoBehaviour
 	void makeGhostIcons ()
 	{
 		List<GameObject> ghosts = mazeManager.getGhosts ();
+		Color colour;
 		ghostIcons = new List<GameObject> ();
 		for (int i=0; i<ghosts.Count; i++) {
-			ghostIcons.Add (makeGhostIcon (transform, ghosts [i]));
+			colour = ((GhostController)ghosts[i].GetComponent<GhostController>()).getColour();
+			ghostIcons.Add (makeGhostIcon (transform, ghosts [i],colour));
 						
 		}
 		GameObject boss = (GameObject)GameObject.Find ("BossGhost");//.GetComponent<BossGhost>();
-		ghostIcons.Add (makeGhostIcon (transform, boss));
+		//colour = ((BossGhost)boss.GetComponent<BossGhost>()).g
+		ghostIcons.Add (makeGhostIcon (transform, boss,Color.red));
 	}
 
-	GameObject makeGhostIcon (Transform parent, GameObject theGhost)
+	GameObject makeGhostIcon (Transform parent, GameObject theGhost,Color colour)
 	{
 		GameObject newIcon = (GameObject)Instantiate (ghostIcon, Vector3.zero, Quaternion.identity);
 		newIcon.transform.parent = parent;
 		newIcon.GetComponent<GhostIcon> ().ghost = theGhost;
+		newIcon.GetComponent<GhostIcon> ().newColour = colour;
 		return newIcon;
 	}
 		
