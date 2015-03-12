@@ -200,14 +200,14 @@ public class PlayerControls : MonoBehaviour
 			Vector3 current = frontier.Dequeue ();
 			neighbours = mazeManager.getRoutes (current);
 			for (int i=0; i<neighbours.Count; i++) {
-				float newCost = (float)costSoFar [current] + 1.0f;
+				float newCost = (float)costSoFar [current] + mazeCost (neighbours[i]);
 				if (neighbours[i].Equals (lastCell)) {
-					newCost+=2;
+					newCost+=10;
 				}
 
 				// if we haven't come here before or have a better way then add
 				if (!costSoFar.Contains (neighbours [i]) || (newCost < (float)costSoFar [neighbours [i]])) {
-					score = mazeScore (neighbours [i]);
+					score = mazeScore (neighbours [i])/newCost;
 					costSoFar [neighbours [i]] = newCost;
 					scoreSoFar [neighbours [i]] = (float)scoreSoFar [current] + score;
 					float priority = newCost;
