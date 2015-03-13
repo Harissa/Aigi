@@ -1308,6 +1308,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!1 &114808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 414808}
+  - 108: {fileID: 10814808}
+  m_Layer: 0
+  m_Name: Point light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &400000
 Transform:
   m_ObjectHideFlags: 1
@@ -2368,7 +2384,7 @@ Transform:
   m_Children:
   - {fileID: 400146}
   m_Father: {fileID: 400166}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!4 &400164
 Transform:
   m_ObjectHideFlags: 1
@@ -2384,7 +2400,7 @@ Transform:
   - {fileID: 400156}
   - {fileID: 400154}
   m_Father: {fileID: 400166}
-  m_RootOrder: 0
+  m_RootOrder: 1
 --- !u!4 &400166
 Transform:
   m_ObjectHideFlags: 1
@@ -2395,6 +2411,7 @@ Transform:
   m_LocalPosition: {x: .5, y: -.100000001, z: .5}
   m_LocalScale: {x: .400000006, y: .400000006, z: .400000006}
   m_Children:
+  - {fileID: 414808}
   - {fileID: 400164}
   - {fileID: 400162}
   - {fileID: 400170}
@@ -2424,7 +2441,19 @@ Transform:
   m_Children:
   - {fileID: 400168}
   m_Father: {fileID: 400166}
-  m_RootOrder: 2
+  m_RootOrder: 3
+--- !u!4 &414808
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: .5, z: 0}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_Children: []
+  m_Father: {fileID: 400166}
+  m_RootOrder: 0
 --- !u!20 &2000000
 Camera:
   m_ObjectHideFlags: 1
@@ -2606,6 +2635,41 @@ Animator:
   m_ApplyRootMotion: 1
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!108 &10814808
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 114808}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Type: 2
+  m_Color: {r: .986206889, g: 1, b: 0, a: 1}
+  m_Intensity: 1
+  m_Range: 5
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_Strength: 1
+    m_Bias: .0500000007
+    m_Softness: 4
+    m_SoftnessFade: 1
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_ActuallyLightmapped: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 1
+  m_ShadowSamples: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+  m_IndirectIntensity: 1
+  m_AreaSize: {x: 1, y: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2624,6 +2688,7 @@ MonoBehaviour:
   mainMap: {fileID: 0}
   dotSound: {fileID: 8300000, guid: bea376a625abb4048b384b0e17b9103e, type: 3}
   run: 304
+  lastCell: {x: 0, y: 0, z: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

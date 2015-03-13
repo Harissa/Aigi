@@ -193,7 +193,7 @@ AudioSource:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_audioClip: {fileID: 8300000, guid: 254c7105b8cb44c1ab6c34eb3eed6a1d, type: 3}
   m_PlayOnAwake: 1
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: .5
-  colour: {r: 0, g: 0, b: 0, a: 0}
+  colour: {r: 1, g: .0274509806, b: .0274509806, a: 0}
   turnSpeed: 5
 --- !u!124 &12438244
 Behaviour:

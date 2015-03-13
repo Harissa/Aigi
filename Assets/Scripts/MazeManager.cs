@@ -82,15 +82,15 @@ public class MazeManager : MonoBehaviour
 	int getMazeSize (int level)
 	{
 		int size = Mathf.Clamp (level + 4, 4, 10);
-		if (level == 1) {
+		/*if (level == 1) {
 			size = 3;
-		}
+		}*/
 		return size;
 	}
 
 	void createDots ()
 	{
-		//Vector3 offset = new Vector3 (halfCellWidth, 0, halfCellWidth);
+	
 		Vector3 offset = new Vector3 (0, 0, 0);
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
@@ -104,13 +104,13 @@ public class MazeManager : MonoBehaviour
 	{
 		int noOfGhosts;
 		ghosts = new List<GameObject> ();
-		if (newLevel == 1) {
+		/*if (newLevel == 1) {
 			noOfGhosts = 0;
 		} else {
 			noOfGhosts = newLevel - 1;
-		}
-		// Todo
-		//noOfGhosts = 0;
+		}*/
+		noOfGhosts = Mathf.Min (newLevel, 3);
+
 
 		for (int i=0; i<noOfGhosts; i++) {
 			ghosts.Add (makeGhost (i+1));

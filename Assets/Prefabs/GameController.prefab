@@ -860,7 +860,7 @@ GUIText:
   m_GameObject: {fileID: 100018}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: You lost a life
+  m_Text: You caught a thief
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
@@ -952,7 +952,7 @@ GUIText:
   m_GameObject: {fileID: 100032}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: Arggh!
+  m_Text: Gotcha!
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
@@ -1067,7 +1067,7 @@ GUIText:
   m_GameObject: {fileID: 100044}
   m_Enabled: 1
   serializedVersion: 3
-  m_Text: Collect dots, avoid ghosts
+  m_Text: Catch the thief!
   m_Anchor: 4
   m_Alignment: 0
   m_PixelOffset: {x: 0, y: 0}
