@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour
 	public int level;
 	public AudioClip dieSound;
 	public AudioClip successSound;
+	private PlayerControls player;
 	//public int targetScore;
 	
 	public string levelToLoad;
@@ -77,7 +78,7 @@ public class GameController : MonoBehaviour
 	void startGame ()
 	{
 		level = 1;//1;
-		lives = 3;
+		lives = 1;//lives;
 		updateLevel ();
 		updateLives ();
 		started = false;
@@ -94,7 +95,7 @@ public class GameController : MonoBehaviour
 	void nextLevel ()
 	{
 		level++;
-		lives = 3;
+		lives = 1;
 		updateLives ();
 		updateLevel ();
 		startLevel ();
@@ -124,7 +125,7 @@ public class GameController : MonoBehaviour
 
 	void setPlayerPos ()
 	{
-		PlayerControls player = (PlayerControls)GameObject.Find ("Player").GetComponent (typeof(PlayerControls));
+		player = (PlayerControls)GameObject.Find ("Player").GetComponent (typeof(PlayerControls));
 		//Player.transform.position = new Vector3 (-0.5f + (maze.width % 2) / 2.0f, 0, -0.5f + (maze.height % 2) / 2.0f);
 		player.setStartPos (Mathf.Round (maze.width / 2.0f), Mathf.Round (maze.height / 2.0f));
 	
@@ -145,6 +146,7 @@ public class GameController : MonoBehaviour
 	void pause ()
 	{
 		paused = true;
+		player.paused = true;
 		Time.timeScale = 0;
 		pauseGUI.SetActive (true);
 		gameGUI.SetActive (false);
@@ -154,6 +156,7 @@ public class GameController : MonoBehaviour
 	{
 		Time.timeScale = 1;
 		paused = false;
+		player.paused = false;
 		pauseGUI.SetActive (false);
 		gameGUI.SetActive (true);
 	}
@@ -164,9 +167,10 @@ public class GameController : MonoBehaviour
 
 		if (state != GameStates.levelComplete) {
 			Debug.Log ("play success sound");
-			GameObject player = GameObject.Find ("Player");
-			AudioSource.PlayClipAtPoint (successSound, player.transform.position);
+			GameObject playerPos = GameObject.Find ("Player");
+			AudioSource.PlayClipAtPoint (successSound, playerPos.transform.position);
 		}
+		player.paused = true;
 		state = GameStates.levelComplete;
 		pillsInWorld = 999;
 		completeText.text = "Level " + level.ToString () + " Complete";
@@ -186,20 +190,23 @@ public class GameController : MonoBehaviour
 
 	public void playerDied ()
 	{
-		GameObject player = GameObject.Find ("Player");
-		AudioSource.PlayClipAtPoint (dieSound, player.transform.position);
-		MazeManager mazeManager = (MazeManager)GameObject.Find ("MazeDrawer").GetComponent (typeof(MazeManager));
-		mazeManager.enableGhostSounds (false);
-		gameGUI.SetActive (false);
-		lives--;
-		updateLives ();
-		if (lives == 0) {
-			levelCompleted ();
-			//gameOver ();
-		} else {
-			dieGUI.SetActive (true);
-			Time.timeScale = 0;
-			state = GameStates.died;
+		if (state == GameStates.playing) {
+			GameObject playerPos = GameObject.Find ("Player");
+			AudioSource.PlayClipAtPoint (dieSound, playerPos.transform.position);
+			MazeManager mazeManager = (MazeManager)GameObject.Find ("MazeDrawer").GetComponent (typeof(MazeManager));
+			mazeManager.enableGhostSounds (false);
+			gameGUI.SetActive (false);
+			lives--;
+			updateLives ();
+			player.paused=true;
+			if (lives == 0) {
+				levelCompleted ();
+				//gameOver ();
+			} else {
+				dieGUI.SetActive (true);
+				Time.timeScale = 0;
+				state = GameStates.died;
+			}
 		}
 	}
 
@@ -215,6 +222,7 @@ public class GameController : MonoBehaviour
 		gameGUI.SetActive (true);
 
 		state = GameStates.playing;
+		player.paused = false;
 		Time.timeScale = 1;
 	}
 

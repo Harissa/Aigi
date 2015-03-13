@@ -364,11 +364,11 @@ public class GhostController : MonoBehaviour
 		Vector3 routeCell = startCell;
 		float eachScore;
 		for (int i=0; i<neighbours.Count; i++) {
-			/*if (neighbours [i].Equals (lastCell)) {
+			if (neighbours [i].Equals (lastCell)) {
 				eachScore = 0;
-			} else {*/
+			} else {
 				eachScore = getRouteScore (neighbours [i]);
-			//}
+			}
 			if (eachScore >= bestRouteScore) {
 				routeCell = neighbours [i];
 				bestRouteScore = eachScore;
@@ -380,12 +380,35 @@ public class GhostController : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
-	  
-		if (maze.canSee (transform.position, player.transform.position, 3)) {
+		float distance = Vector3 .Distance(transform.position, player.transform.position);
+		switch (state) {
+		case GhostBehaviours.flank:
+			if (distance > 7) {
+				state = GhostBehaviours.search;
+			}
+			if (distance < 5) {
+				state = GhostBehaviours.chase;
+			}
+			break;
+
+		case GhostBehaviours.search:
+		
+			if (distance < 5) {
+				state = GhostBehaviours.chase;
+			}
+			break;
+		case GhostBehaviours.chase:
+			if (distance > 5) {
+				state = GhostBehaviours.flank;
+			}
+			break;
+		}
+
+		/*if (maze.canSee (transform.position, player.transform.position, 4)) {
 			state = GhostBehaviours.chase;
 		} else {
 			state = commandState;
-		}
+		}*/
 		if ((Vector3.Distance (nextCell, transform.position) < 0.4)) {
 			currentCell.x = Mathf.Round (transform.position.x);
 			currentCell.z = Mathf.Round (transform.position.z);

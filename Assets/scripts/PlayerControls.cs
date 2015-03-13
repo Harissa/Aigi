@@ -21,7 +21,7 @@ public class PlayerControls : MonoBehaviour
 	private bool eatenDot = false;
 	private CharacterController cController;
 	private Animator animator;
-	private bool paused = true;
+	public bool paused = true;
 	private Vector3 currentCell;
 	private Vector3 nextCell;
 	public Vector3 lastCell;

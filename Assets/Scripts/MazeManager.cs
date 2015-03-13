@@ -237,7 +237,7 @@ public class MazeManager : MonoBehaviour
 	{
 		for (int i=0; i<ghosts.Count; i++) {
 			setGhostPosition (ghosts[i]);
-			ghosts [i].GetComponent<GhostBillboard> ().clearStack ();
+			//ghosts [i].GetComponent<GhostBillboard> ().clearStack ();
 		}
 		boss = (GameObject)GameObject.Find ("BossGhost");
 		setGhostPosition(boss);
