@@ -111,7 +111,6 @@ public class MazeManager : MonoBehaviour
 		}*/
 		noOfGhosts = Mathf.Min (newLevel, 3);
 
-
 		for (int i=0; i<noOfGhosts; i++) {
 			ghosts.Add (makeGhost (i+1));
 		}
